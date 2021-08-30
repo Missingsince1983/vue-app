@@ -1,4 +1,4 @@
-# Quasar App (vue)
+# Quasar App (vue-test)
 
 A Quasar Framework app
 

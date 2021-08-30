@@ -1,47 +1,35 @@
 <template>
-  <q-page class="row items-center justify-evenly">
-    <example-component
-      title="Example component"
-      active
-      :todos="todos"
-      :meta="meta"
-    ></example-component>
+  <q-page class="card-index row items-center justify-evenly">
+    <transition name="fade">
+      <div class="item-block" v-if="MenuItem" :key="MenuItem.id">
+        <div class="item-block__picture item-block-picture">
+          <div class="item-block-picture__image" :style="`background-image: url(${MenuItem.pic})`"></div>
+        </div>
+        <div class="item-block__description item-block-description">
+          <div class="item-block-description__header">
+            {{ MenuItem.title }}
+          </div>
+          <div class="item-block-description__content">
+            {{ MenuItem.content }}
+          </div>
+          <div class="item-block-description__button">
+            {{ MenuItem.btn }}
+          </div>
+        </div>
+      </div>
+    </transition>
   </q-page>
 </template>
 
 <script lang="ts">
-import { Todo, Meta } from 'components/models';
-import ExampleComponent from 'components/ClassComponent.vue';
 import { Vue, Options } from 'vue-class-component'
-
+import { MenuLink } from 'components/models'
 @Options({
-  components: { ExampleComponent }
+  components: { }
 })
 export default class PageIndex extends Vue {
-  todos: Todo[] = [
-    {
-      id: 1,
-      content: 'ct1'
-    },
-    {
-      id: 2,
-      content: 'ct2'
-    },
-    {
-      id: 3,
-      content: 'ct3'
-    },
-    {
-      id: 4,
-      content: 'ct4'
-    },
-    {
-      id: 5,
-      content: 'ct5'
-    }
-  ];
-  meta: Meta = {
-    totalCount: 1200
-  };
+  get MenuItem (): MenuLink {
+    return this.$store.getters['menu/getMenuItem'] as MenuLink //eslint-disable-line
+  }
 };
 </script>
