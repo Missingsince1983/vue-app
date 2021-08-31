@@ -8,13 +8,16 @@ export interface Meta {
 }
 
 export interface MenuLink {
-  id: string;
-  title: string;
-  subtitle: string;
-  btn: string;
-  pic: string;
-  link: string;
-  content: string;
+  id: number,
+  "menu_title": string,
+  "menu_subtitle": string,
+  content: {
+    header: string,
+    "short_text": string,
+    "full_text": string,
+    "image_url": string,
+    "full_text_btn_title": string
+  }
 }
 
 export interface Screen {

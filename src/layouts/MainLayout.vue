@@ -18,7 +18,13 @@
         </div>
       </q-toolbar>
     </q-header>
-
+    <div class="loader" v-if="localLoader">
+        <q-spinner-ball
+          class="loader-spinner"
+          color="white"
+          size="4em"
+        />
+    </div>
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
@@ -26,11 +32,11 @@
       class="bg-primary"
     >
       <q-list>
-        <div class="main-list" v-if="essentialLinks.length">
-          <div v-ripple v-for="item in essentialLinks" :key="item.id" class="main-list__item main-list-item" @click="setMenuItem(item)" :class="{selected: MenuItem && MenuItem.id === item.id}">
-            <div class="main-list-item__title">{{ item.title }}</div>
-            <div class="main-list-item__subtitle">{{ item.subtitle }}</div>
-            
+        <div class="main-list" v-if="menuLinks.length">
+          <div v-ripple v-for="item in menuLinks" :key="item.id" class="main-list__item main-list-item" @click="setMenuItem(item)" :class="{selected: MenuItem && MenuItem.id === item.id}">
+            <div class="main-list-item__title">{{ item.menu_title }}</div>
+            <div class="main-list-item__subtitle">{{ item.menu_subtitle }}</div>
+
           </div>
         </div>
 
@@ -45,36 +51,13 @@
 </template>
 
 <script lang="ts">
-import EssentialLink from 'components/EssentialLink.vue'
-const linksList: Array<MenuLink> = [
-  {
-    id: '1',
-    title: 'Docs',
-    subtitle: 'Here subtitle',
-    content: '  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Id quisquam temporibus omnis maiores incidunt nulla quas laudantium deserunt quaerat. Soluta.',
-    link: 'https://quasar.dev',
-    btn: 'learn more',
-    pic: 'https://klike.net/uploads/posts/2018-10/1539499416_1.jpg'
-  },
-  {
-    id: '2',
-    title: 'Info',
-    content: '  Lorem ipsum dolor sit amet consectetur, adipisicing elit. Id quisquam temporibus omnis maiores incidunt nulla quas laudantium deserunt quaerat. Soluta.',
-    link: 'https://quasar.dev',
-    btn: 'Join',
-    subtitle: '',
-    pic: 'https://ichef.bbci.co.uk/news/976/cpsprodpb/A7E9/production/_118158924_gettyimages-507245091.jpg'
-  }
-];
-
 import { Vue, Options } from 'vue-class-component'
 import { MenuLink, Screen } from '../components/models'
 @Options({
-  components: { EssentialLink }
+  components: { }
 })
 export default class MainLayout extends Vue {
   leftDrawerOpen = false;
-  essentialLinks: Array<MenuLink> = linksList;
   localLoader = false;
   toggleLeftDrawer () {
     this.leftDrawerOpen = !this.leftDrawerOpen
@@ -103,10 +86,18 @@ export default class MainLayout extends Vue {
     this.$store.dispatch('menu/updateScreen', window.innerWidth) //eslint-disable-line
   }
 
-  mounted () {
+  async loadMenu (): Promise<void> {
+    await this.$store.dispatch('menu/loadMenu').then((resp) => {
+      this.menuLinks = resp
+    }) //eslint-disable-line
+  }
+
+  async mounted () {
     this.updateScreenWidth()
-    this.setMenuItem(this.essentialLinks[0])
     window.addEventListener('resize', () => { this.updateScreenWidth() })
+    this.localLoader = true
+    await this.loadMenu()
+    this.localLoader = false
   }
 }
 </script>

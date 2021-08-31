@@ -2,6 +2,20 @@
   background: orange;
   padding: 16px;
 }
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: orange;
+  z-index: 5000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 .item-block-picture {
   margin-bottom: 32px;
   &__image {
@@ -20,6 +34,10 @@
     font-size: 18px;
     line-height: 26px;
     margin-bottom: 32px;
+    &--centered {
+      color: white;
+      margin: 0 auto;
+    }
   }
   &__content{
     font-size: 16px;
@@ -42,6 +60,7 @@
     font-size: 18px;
     line-height: 26px;
     cursor: pointer;
+    padding: 0 10px;
   }
 }
 .item-block {
@@ -78,7 +97,7 @@
       width:calc(100% - 540px);
     }
   }
-  .item-block-description{ 
+  .item-block-description{
     &__header {
       font-size: 22px;
       line-height: 30px;
